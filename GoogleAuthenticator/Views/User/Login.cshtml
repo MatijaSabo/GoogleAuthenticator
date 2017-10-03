@@ -1,0 +1,86 @@
+﻿@model GoogleAuthenticator.Models.UserLogin
+
+@{
+    ViewBag.Title = "Login";
+}
+
+@if (ViewBag.Status == null || !ViewBag.Status)
+{
+    <div class="page-header">
+        <h1>Login</h1>
+    </div>
+
+    if (ViewBag.FailLogin != null)
+    {
+        <div class="alert alert-dismissable alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>@ViewBag.Message</strong>
+        </div>
+    }
+
+    using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group">
+                @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Login" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    }
+}
+
+else
+{
+    <div class="page-header">
+        <h1>2FA Verification</h1>
+    </div>
+
+    if (ViewBag.QR_show != null && ViewBag.QR_show == true)
+    {
+        <div>
+            <img src="@ViewBag.BarcodeImageUrl" />
+        </div>
+    }
+
+    <div>
+        @using (Html.BeginForm("Verify2Fa", "User", FormMethod.Post))
+        {
+            <div class="form-group">
+                <label for="passcode">Google code</label>
+                <input id="passcode" name="passcode" class="form-control" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Verify" class="btn btn-primary" />
+            </div>
+        }
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Registration", "Registration")
+</div>
+
+@section Scripts {
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

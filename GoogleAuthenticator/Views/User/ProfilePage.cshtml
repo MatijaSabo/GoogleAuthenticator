@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "ProfilePage";
+}
+
+<div class="page-header">
+    <h1>Profile Page</h1>
+</div>
+
+<div>
+    <h3>Welcome @ViewBag.Message</h3>
+</div>
+
+ <div>
+    <hr />
+    @using (Html.BeginForm("Logout", "User", FormMethod.Post)){
+         <div class="form-group">
+             <input type = "submit" value="Logout" class="btn btn-default" />
+         </div>
+     }
+</div>
